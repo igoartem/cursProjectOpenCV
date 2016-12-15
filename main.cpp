@@ -51,8 +51,7 @@ void compareImage(QString &nameImg1, QString &nameImg2){
     extractor.compute( img_object, keypoints_object, descriptors_object );
     extractor.compute( img_scene, keypoints_scene, descriptors_scene );
 
-    //-- Step 3: Matching descriptor vectors using FLANN matcher
-    //Сопоставляю точки на целевом объекте и в сцене, получаю так называемые матчи ( FLANN, класс FlannBasedMatcher, метод match).
+    //Сопоставляю точки на целевом объекте и в сцене, получаю так называемые матчи
     FlannBasedMatcher matcher;
     std::vector< DMatch > matches;
     matcher.match( descriptors_object, descriptors_scene, matches );
@@ -60,8 +59,7 @@ void compareImage(QString &nameImg1, QString &nameImg2){
     double max_dist = 0; double min_dist = 100;
 
     //находим максимальное и минимальную дистанцию
-    for( int i = 0; i < descriptors_object.rows; i++ )
-    {
+    for( int i = 0; i < descriptors_object.rows; i++ ){
         double dist = matches[i].distance;
         if( dist < min_dist )
             min_dist = dist;
@@ -72,9 +70,9 @@ void compareImage(QString &nameImg1, QString &nameImg2){
     //сохраняем только матчи расстояние которых составляет менее 3 * Min_Dist
     std::vector< DMatch > good_matches;
 
-    for( int i = 0; i < descriptors_object.rows; i++ )
-    { if( matches[i].distance < 3*min_dist )
-        { good_matches.push_back( matches[i]); }
+    for( int i = 0; i < descriptors_object.rows; i++ ){
+        if( matches[i].distance < 3*min_dist )
+            good_matches.push_back( matches[i]);
     }
 
     Mat img_matches;
@@ -85,8 +83,7 @@ void compareImage(QString &nameImg1, QString &nameImg2){
     std::vector<Point2f> obj;
     std::vector<Point2f> scene;
 
-    for( int i = 0; i < good_matches.size(); i++ )
-    {
+    for( int i = 0; i < good_matches.size(); i++ ){
         //Получаям ключевые точки из хороших матчей
         obj.push_back( keypoints_object[ good_matches[i].queryIdx ].pt );
         scene.push_back( keypoints_scene[ good_matches[i].trainIdx ].pt );
